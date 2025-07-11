@@ -17,14 +17,14 @@ def mostrar_informe_env_sol():
     fc.estilos_css()
 
     #Especificar la ruta del archivo Excel
-    file_path_Env = "G:/.shortcut-targets-by-id/1rqpfbdZ6z51epFv6ZwognhckW7HqBMjN/SIRI_2024_INFORMES_SOBREPESO/INFORME_ENVASE_SOLUBLE_MEDELLIN/Consolidado.xlsx"
+    file_path_Env = r"\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\Consolidados_Salones\Envase_Soluble\Consolidado_V2.xlsx"
 
     #Verificar si el archivo existe
     if not os.path.exists(file_path_Env):
         st.info("No se encontró el archivo de datos en la ruta especificada.")
     else:
         #Leer el archivo Excel con Pandas
-        df = pd.read_excel(file_path_Env, sheet_name="Hoja1")
+        df = pd.read_excel(file_path_Env, sheet_name="Hoja8")
 
         #Convertir los nombres de las columnas a str y eliminar espacios adicionales
         df.columns = df.columns.astype(str).str.strip()

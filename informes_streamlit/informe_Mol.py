@@ -17,7 +17,7 @@ def mostrar_informe_molido():
     fc.estilos_css()
 
     #Especificar la ruta del archivo Excel
-    file_path_Mol = "G:/.shortcut-targets-by-id/1rqpfbdZ6z51epFv6ZwognhckW7HqBMjN/SIRI_2024_INFORMES_SOBREPESO/INFORME_MOLIDO/Consolidado_V2.xlsx"
+    file_path_Mol = r"\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\Consolidados_Salones\Molido\Consolidado_V2.xlsx"
 
     #Verificar si el archivo existe
     if not os.path.exists(file_path_Mol):

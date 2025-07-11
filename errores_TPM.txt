@@ -1,0 +1,10 @@
+-----------------------------------Registro de errores - 2025-07-11 09:03:22-----------------------------------
+
+🚨Traceback (most recent call last):
+  File "C:\mha\scripts_sobrepeso\ejecutar_procesar_tpm.py", line 13, in <module>
+    subprocess.run(["python", ruta], check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\CMMHERRERA\AppData\Local\Programs\Python\Python313\Lib\subprocess.py", line 579, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['python', 'C:\\mha\\scripts_sobrepeso\\informes_py\\Script_Emp_2_v2.py']' returned non-zero exit status 1.

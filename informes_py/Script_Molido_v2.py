@@ -8,7 +8,7 @@ def main_Script_Molido_v2():
     import os
     import pandas as pd
     import warnings
-    import functions as fc
+    import funciones_tpm as fc
 
 
     # In[2]:
@@ -31,30 +31,19 @@ def main_Script_Molido_v2():
 
 
     #Rutas del archivo de la COOISPI
-    Ruta_COOISPI = "G:/.shortcut-targets-by-id/1rqpfbdZ6z51epFv6ZwognhckW7HqBMjN/SIRI_2024_INFORMES_SOBREPESO/DATOS/Datos_COOISPI_Molido.csv"           # Ruta COOISPI en csv
-    #Ruta_COOISPI_2024="/content/drive/MyDrive/Consolidado COOISPI/2024/Z10.xlsx"                                                                        # Ruta COOISPI en el 2024
-    #Ruta_COOISPI_2025="/content/drive/MyDrive/Consolidado COOISPI/2025/Z10.xlsx"                                                                        # Ruta COOISPI en el drive de Jesse Mauricio Beltran
+    Ruta_COOISPI = r'\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\COOISPI\Datos_COOISPI_Molido.csv'                         # Ruta COOISPI en csv
 
     #Rutas del archivo del EGE
-    Ruta_Archivo_EGE = "G:/.shortcut-targets-by-id/1rqpfbdZ6z51epFv6ZwognhckW7HqBMjN/SIRI_2024_INFORMES_SOBREPESO/DATOS/Datos_Molido_2021.csv"
-    #Ruta_Archivo_EGE = "/content/drive/MyDrive/SIRI_2024_INFORMES_SOBREPESO/DATOS/Datos_Molido_2021.csv"                                                # En formato csv en el drive de Melanny Herrera
-    #Ruta_Archivo_EGE = "/content/drive/MyDrive/appsheet/Coolab/Documentos/Molido/DB Empaque de Molido 2021 MES_Copia.xlsm"                              # Ruta EGE pruebas Melanny Herrera
-    #Ruta_Archivo_EGE = "/content/drive/MyDrive/EGE Colcafé Medellín 2018 - 2024/Data historica/2021-2024/DB Empaque de Molido 2021 MES.xlsm"            # Ruta EGE en el drive de Jesse Mauricio Beltran
+    Ruta_Archivo_EGE = r'\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\Backup_BD_Salones\Datos_Molido_2021.csv'              # Ruta Molido
 
     #Rutas del archivo de Novedades
-    Ruta_Novedades = "G:/.shortcut-targets-by-id/1rqpfbdZ6z51epFv6ZwognhckW7HqBMjN/SIRI_2024_INFORMES_SOBREPESO/INFORME_MOLIDO/Molido_Novedades.xlsx"
-    #Ruta_Novedades = "/content/drive/MyDrive/SIRI_2024_INFORMES_SOBREPESO/INFORME_MOLIDO/Molido_Novedades.xlsx"                                         # Ruta del archivo de Novedades en el drive de Melanny Herrera
-    #Ruta_novedades = '/content/drive/MyDrive/Proyectos/2024/SIRI_2024_INFORMES_SOBREPESO/INFORME_MOLIDO/Molido_Novedades.xlsx'                          # Ruta del archivo de Novedades en el drive de Jesse Mauricio Beltran
+    Ruta_Novedades = r'\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\Consolidados_Salones\Molido\Molido_Novedades_V2.xlsx'   # Ruta del archivo de Novedades
 
     #Rutas del archivo de Consolidados
-    Ruta_Consolidados = "G:/.shortcut-targets-by-id/1rqpfbdZ6z51epFv6ZwognhckW7HqBMjN/SIRI_2024_INFORMES_SOBREPESO/INFORME_MOLIDO/Consolidado_V2.xlsx"
-    #Ruta_Consolidados = "/content/drive/MyDrive/SIRI_2024_INFORMES_SOBREPESO/INFORME_MOLIDO/Consolidado_V2.xlsx"                                        # Ruta del archivo de Consolidados en el drive de Melanny Herrera
-    #Ruta_Consolidados = "/content/drive/MyDrive/Proyectos/2024/SIRI_2024_INFORMES_SOBREPESO/INFORME_MOLIDO/Consolidado.xlsx"                            # Ruta del archivo de Novedades en el drive de Jesse Mauricio Beltran
+    Ruta_Consolidados = r'\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\Consolidados_Salones\Molido\Consolidado_V2.xlsx'     # Ruta del archivo de Consolidados
 
-    #Ruta de salida
-    Ruta_Mol = "G:/.shortcut-targets-by-id/1rqpfbdZ6z51epFv6ZwognhckW7HqBMjN/SIRI_2024_INFORMES_SOBREPESO/INFORME_MOLIDO/"
-    #Ruta_Mol = "/content/drive/MyDrive/SIRI_2024_INFORMES_SOBREPESO/INFORME_MOLIDO/"                                                                    # Ruta del archivo consolidado csv en el drive de Melanny Herrera
-    #Ruta_Mol = "/content/drive/MyDrive/Proyectos/2024/SIRI_2024_INFORMES_SOBREPESO/INFORME_MOLIDO/"                                                     # Ruta del archivo consolidado csv en el drive de Jesse Mauricio Beltran
+    # Ruta de salida
+    # Ruta_Mol = r'\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\Consolidados_Salones\Molido'                                # DB_Molido_Out_vf.csv
 
     #Validacion de existencia de las rutas
     for nombre, ruta in {
@@ -62,7 +51,7 @@ def main_Script_Molido_v2():
       "Ruta_Archivo_EGE": Ruta_Archivo_EGE,
       "Ruta_Novedades": Ruta_Novedades,
       "Ruta_Consolidados": Ruta_Consolidados,
-      "Ruta_Mol": Ruta_Mol,
+      # "Ruta_Mol": Ruta_Mol,
     }.items():
       if not os.path.exists(ruta):
         raise FileNotFoundError(f"La ruta '{nombre}' no fue encontrada.")
@@ -342,8 +331,8 @@ def main_Script_Molido_v2():
     # In[39]:
 
 
-    #Ruta para consolidado df_Mol_2
-    df_Mol_2.to_csv(Ruta_Mol + "DB_Molido_Out_vf.csv", index=True)
+    # Ruta para consolidado df_Mol_2
+    # df_Mol_2.to_csv(Ruta_Mol + "DB_Molido_Out_vf.csv", index=True)
 
 
     # **Archivo de consolidado**
@@ -361,7 +350,6 @@ def main_Script_Molido_v2():
         "Hoja6": df_totalizado_Mes,
         "Hoja7": df_Fechas,
         "Hoja8": df_Mol_2,
-        "Hoja9": df_Mol_2
     }
     #Actualizar hojas del excel de Consolidado_V2
     fc.actualizar_hojas_excel(Ruta_Consolidados, dataframes_consolidado)
@@ -374,11 +362,11 @@ def main_Script_Molido_v2():
 
     #Diccionario de hojas para el archivo de novedades
     dataframes_novedades = {
-        "Hoja1": df_Mol_Nov_Sobrepeso,          #Novedades sobrepeso
-        "Hoja2": df_Mol_Codigos_nan,            #Novedades codigos nulos
-        #"Hoja3": df_Mol_Codigos_unicos,        #Codigos presentes en TPM y no en COOISPI
-        "Hoja4": df_Mol_nan_ceros,              #Valores nulos o ceros para gramaje, unidades producidas y promedio peso unidad
-        "Hoja5": df_non_conver                  #Valores no convertibles
+        "Sobrepeso mayor  20%": df_Mol_Nov_Sobrepeso,           #Novedades sobrepeso
+        "Codigos Nulo TPM": df_Mol_Codigos_nan,                 #Novedades codigos nulos
+        #"Codigos unicos en TPM": df_Mol_Codigos_unicos,        #Codigos presentes en TPM y no en COOISPI
+        "Codigos NA,Vacio, 0": df_Mol_nan_ceros,                #Valores nulos o ceros para gramaje, unidades producidas y promedio peso unidad
+        "Errores": df_non_conver                                #Valores no convertibles
     }
     #Guardar el archivo de Novedades
     fc.crear_archivo_novedades(Ruta_Novedades, dataframes_novedades)

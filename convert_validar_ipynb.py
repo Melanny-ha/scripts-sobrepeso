@@ -37,7 +37,7 @@ for archivo in os.listdir(carpeta_notebooks):                     #recorre todos
             with open(ruta_ipynb, 'r', encoding='utf-8') as f:    #Abre el notebook como texto
                 notebook = nbformat.read(f, as_version=4)
 
-            ep = ExecutePreprocessor(timeout=180, kernel_name="python3")
+            ep = ExecutePreprocessor(timeout=300, kernel_name="python3")
             ep.preprocess(notebook, {'metadata': {'path': carpeta_notebooks}})
 
             codigo_py, _ = exporter.from_notebook_node(notebook)   #Si no hubo errores, convierte el notebook ejecutado a .py

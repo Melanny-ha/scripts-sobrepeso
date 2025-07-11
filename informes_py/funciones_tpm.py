@@ -65,6 +65,9 @@ def leer_archivo(ruta, hoja=None):
 #Funcion para renombrar las columnas de la COOISPI
 def renombrar_cooispi(df):
 
+  #Limpiar columnas(eliminar espacios al inicio y al final)
+  df.columns = [col.strip() for col in df.columns]
+
   #Definir posibles diccionarios de renombrado
   opciones_renombrado = [
     {
@@ -104,11 +107,16 @@ def renombrar_cooispi(df):
   columnas_actuales = set(df.columns)  #Identificar las columnas actuales del DataFrame
 
   #Seleccionar el diccionario de renombrado adecuado
+  renombrado = False    #variable creada ya que al entrar al ciclo si solo una de las opciones de renombre no funciona(y hay dos) muestra el mensaje "No se encontraron columnas..."
   for opcion in opciones_renombrado:
     if set(opcion.keys()).issubset(columnas_actuales):
       df.rename(columns=opcion, inplace=True)
-    else:
-      print("No se encontraron columnas coincidentes para renombrar.")
+      renombrado = True   #se renombra y la variable pasa a True
+      break
+
+  #Si no coincidió con ningun diccionario, no se renombró y ahora sí se muestra el mensaje
+  if not renombrado: 
+    print("No se encontraron columnas coincidentes para renombrar.")
 
   return df
 
@@ -305,7 +313,7 @@ def modificar_costo(df_2):
 
 #Calculo estandar para hallar los Ahorros_Perdidas
 def calcular_ahorros_perdidas(df):
-  df['Ahorros_Perdidas'] = (df['Meta'] - df['Sobrepeso_calculado']) * df['Real_empaque_calculado'] * df['Costo/kg']
+  df['Ahorros/Perdidas'] = (df['Meta'] - df['Sobrepeso_calculado']) * df['Real_empaque_calculado'] * df['Costo/kg']
   return df
 
 #Funcion para mostrra si hay o no filas repetidas en un dataframe
@@ -436,6 +444,9 @@ def crear_archivo_novedades(ruta, dataframes):
   else:
     print(f"⚠️ Advertencia: No todas las hojas fueron guardadas correctamente.")
 
+####################################################################################################################
+
+
 # wb = load_workbook(Ruta_Consolidados)
 # print("Hojas visibles en el archivo:")
 # for sheet in wb.sheetnames:
@@ -453,57 +464,3 @@ def crear_archivo_novedades(ruta, dataframes):
 #     print(f"La hoja '{hoja_a_eliminar}' no existe.")
 # # Guardar el libro modificado
 # workbook.save(Ruta_Consolidados)
-
-# #Funcion para renombrar las columnas de la COOISPI
-# def renombrar_cooispi(df):
-#   if df.empty:
-#     print("El DataFrame está vacío.")
-#     return df
-#
-#   #Definir posibles diccionarios de renombrado
-#   opcion_1 = {
-#     'Unnamed: 0': 'Orden',
-#     'Unnamed: 1': 'Material',
-#     'Unnamed: 2': 'Texto de material',
-#     'Unnamed: 3': 'Ctd.',
-#     'Unnamed: 4': 'Lote',
-#     'Unnamed: 5': 'Almacén',
-#     'Unnamed: 6': 'Cl.mov.',
-#     'Unnamed: 7': 'Unidad',
-#     'Unnamed: 8': 'Doc.mat.',
-#     'Unnamed: 9': 'Pto.desc.',
-#     'Unnamed: 10': 'Fecha',
-#     'Unnamed: 11': 'ctd.UME',
-#     'Unnamed: 12': 'Impte.ML'
-#   }
-#
-#   opcion_2 = {
-#     'Orden': 'Orden',
-#     'Material': 'Material',
-#     'Texto de material': 'Texto de material',
-#     'Ctd.en UM base y signo +/- (MEINS)': 'Ctd.',
-#     'Lote': 'Lote',
-#     'Almacén': 'Almacén',
-#     'Clase de movimiento': 'Cl.mov.',
-#     'Unidad medida base (=MEINS)': 'Unidad',
-#     'Documento material': 'Doc.mat.',
-#     'Puesto descarga': 'Pto.desc.',
-#     'Fe.contabilización': 'Fecha',
-#     'Ctd.en UM entrada (/CWM/ERFME)': 'ctd.UME',
-#     'Importe ML (WAERS)': 'Impte.ML'
-#   }
-#
-#   df = df.copy(deep=True) #Crear una copia completa de todo df
-#
-#   #Identificar las columnas actuales del DataFrame
-#   columnas_actuales = df.columns
-#
-#   #Seleccionar el diccionario de renombrado adecuado
-#   if set(opcion_1.keys()).issubset(columnas_actuales):
-#     df.rename(columns=opcion_1, inplace=True)
-#   elif set(opcion_2.keys()).issubset(columnas_actuales):
-#     df.rename(columns=opcion_2, inplace=True)
-#   else:
-#     print("No se encontraron columnas coincidentes para renombrar.")
-#
-#   return df

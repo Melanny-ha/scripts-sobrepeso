@@ -1,7 +1,6 @@
 import streamlit as st
 from io import BytesIO
 import pandas as pd
-from openpyxl import load_workbook
 
 #Funcion para convertir DataFrame a Excel(Descargar tabla)
 def convertir_a_excel(df):
