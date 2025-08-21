@@ -34,7 +34,7 @@ def main_Generar_COOISPI_csv():
     # In[3]:
 
 
-    def ejecutar_COOISPI(num_arch_cooispi, nombre_arch_salida, almacenes):
+    def ejecutar_COOISPI(num_arch_cooispi, nombre_arch_salida, almacenes, material=None):
       Ruta_COOISPI_2024, Ruta_COOISPI_2025 = rutas(num_arch_cooispi)
 
       #leer_archivos_cooispi
@@ -66,11 +66,18 @@ def main_Generar_COOISPI_csv():
       #merge_cooispi/merge
       df_COOISPI_COMB = fc.merge_cooispi(df_COOISPI_261_262, df_COOISPI_101_102)
 
+      #Filtrar materiales que comiencen por un número específico (solo si se especificó un valor en 'material') osea para Molido - Bogotá
+      if material is not None:
+        #Filtrar materiales que comiencen por 3
+        df_COOISPI_COMB = df_COOISPI_COMB[df_COOISPI_COMB['Material'].str.startswith(f"{material}")]
+        #Asignarle el nombre del centro
+        df_COOISPI_COMB['Centro']='CM15'
+      else:
+        #Asignarle el nombre del centro
+        df_COOISPI_COMB['Centro']='CM10'
+
       #Renombrar columnas para quedar igual al archivo de Excel de Luz Indira
       df_COOISPI_COMB.rename(columns={'Material_producto_term':'Codigo', 'Texto de material_producto_term':'TEXTO PT'},inplace=True)
-
-      #Asignarle el nombre del centro
-      df_COOISPI_COMB['Centro']='CM10'
 
       #Definir columnas para df_COOISPI_COMB y asignarlas
       Columnas=['Orden', 'Codigo','TEXTO PT','Doc.mat.','Cl.mov.','Material','Texto de material','Almacén','Lote','Centro','Unidad','Ctd.','Impte.ML','Fecha']
@@ -85,10 +92,12 @@ def main_Generar_COOISPI_csv():
       #Forzar el cambio de tipo de dato para un merge futuro en scripts principales
       df_COOISPI_COMB['Codigo'] = df_COOISPI_COMB['Codigo'].astype(str)
 
+      #Rutas de destino
       ruta_destino = r'\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\COOISPI'
 
-      return df_COOISPI_COMB.to_csv(os.path.join(ruta_destino, f"{nombre_arch_salida}.csv"), index=False)
+      df_COOISPI_COMB.to_csv(os.path.join(ruta_destino, f"{nombre_arch_salida}.csv"), index=False)
 
+      return df_COOISPI_COMB
 
     # In[4]:
 
@@ -96,26 +105,32 @@ def main_Generar_COOISPI_csv():
     #iniciar_credenciales, si algo falla aquí, el script se detiene
     #gc = iniciar_credenciales()
 
+
     #Diccionario de datos de entrada por informe de TPM
     archivos = [
-      {"codigo_ruta": "Z10", "nombre_arch": "Datos_COOISPI_Empaques2", "almacenes": [1028, 1001]},
-      {"codigo_ruta": "Z06", "nombre_arch": "Datos_COOISPI_Env_Sol", "almacenes": [1035, 1001]},
-      {"codigo_ruta": "Z09", "nombre_arch": "Datos_COOISPI_Mezclas", "almacenes": [1038, 1001]},
-      {"codigo_ruta": "Z02", "nombre_arch": "Datos_COOISPI_Molido", "almacenes": [1030, 1001]},
+      {"codigo_ruta": "Z10", "nombre_arch": "Datos_COOISPI_Empaques2", "almacenes": [1028, 1001], "material": None},
+      {"codigo_ruta": "Z06", "nombre_arch": "Datos_COOISPI_Env_Sol", "almacenes": [1035, 1001], "material": None},
+      {"codigo_ruta": "Z09", "nombre_arch": "Datos_COOISPI_Mezclas", "almacenes": [1038, 1001], "material": None},
+      {"codigo_ruta": "Z02", "nombre_arch": "Datos_COOISPI_Molido", "almacenes": [1030, 1001], "material": None},
+      {"codigo_ruta": "Z02", "nombre_arch": "Datos_COOISPI_Molido_Bog", "almacenes": [1530, 1501], "material": 3},
     ]
 
     #Ejecucion de todos los informes
+    resultados = {}
+
     for archivo in archivos:
       print(f"Procesando archivo '{archivo['nombre_arch']}'...")
       try:
-        ejecutar_COOISPI(
+        df_resultado = ejecutar_COOISPI(
           num_arch_cooispi = archivo["codigo_ruta"],
           nombre_arch_salida = archivo["nombre_arch"],
-          almacenes = archivo["almacenes"]
+          almacenes = archivo["almacenes"],
+          material = archivo["material"],
         )
-        print(f"✅ Archivo '{archivo['nombre_arch']}' procesado correctamente.\n")
+        resultados[archivo["nombre_arch"]] = df_resultado
+        print(f"✅ Archivo '{archivo['nombre_arch']}' procesado correctamente. Registros: {df_resultado.shape[0]}\n")
       except Exception as e:
-        print(f"Error al procesar '{archivo['nombre_arch']}': {e}\n")
+        print(f"❌ Error al procesar '{archivo['nombre_arch']}': {e}\n")
 
 
 if __name__ == '__main__':

@@ -138,6 +138,8 @@ def main_Script_Mezclas_v2():
     #Validar_y_convertir_datos
     df_non_conver, df_Mezclas = fc.validar_numericos(df_Mezclas, 'Peso Promedio de la unidad (K):')
 
+    df_non_conver, df_Mezclas = fc.validar_numericos(df_Mezclas, 'Unidades Producidas (Conformes) :')
+
 
     # In[16]:
 

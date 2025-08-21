@@ -41,21 +41,21 @@ def mes_eng_esp():
   }
 
 #Funcion para leer los archivos de la COOISPI
-def leer_archivo(ruta, hoja=None):
+def leer_archivo(ruta, hoja=None, skiprows=None):
   try:
     if not os.path.exists(ruta):  #Validar si la ruta existe
       raise FileNotFoundError(f"La ruta '{ruta}' no existe.")
-    print("Leyendo archivo...")
+
     if ruta.lower().endswith('.csv'):  #Si la ruta es un csv
       df = pd.read_csv(ruta)
       return df
-    elif ruta.lower().endswith(('.xlsx', 'xls')):  #Sino, si es un xlsx o xls
+    elif ruta.lower().endswith(('.xlsx', 'xls', 'xlsm')):  #Sino, si es un xlsx o xls
       excel = pd.ExcelFile(ruta)
 
       if hoja not in excel.sheet_names:  #Verificar que la hoja solicitada exista
         raise ValueError(f"La hoja '{hoja}' no existe en el archivo. Hojas disponibles: {excel.sheet_names}")
 
-      df = pd.read_excel(excel, sheet_name=hoja)  #Leer directamente la hoja
+      df = pd.read_excel(excel, sheet_name=hoja, skiprows=skiprows)  #Leer directamente la hoja
       return df
     else:
       raise ValueError("Formato no soportado. Solo se permiten archivos CSV y Excel.")
@@ -224,6 +224,15 @@ def calcular_columnas(df):
   df['Sobrepeso_calculado'] = df['Diferencia_calculado'] / df['Debe_ser_empaque_calculado']
   return df
 
+#Funcion para calcular el Real empacado, Deber ser, Diferencia y Sorbrepeso del archivo original de TPM dividido entre 1000 para pasar la unidad de medida de gramos a kilogramos
+def calcular_columnas_bog(df):
+  df = df.copy()
+  df['Real_empaque_calculado'] = df['Unidades Producidas (Conformes) :'] * (df['Peso Promedio de la unidad (K):']/1000)
+  df['Debe_ser_empaque_calculado'] = df['Unidades Producidas (Conformes) :'] * (df['Gramaje (K):']/1000)
+  df['Diferencia_calculado'] = df['Real_empaque_calculado'] - df['Debe_ser_empaque_calculado']
+  df['Sobrepeso_calculado'] = df['Diferencia_calculado'] / df['Debe_ser_empaque_calculado']
+  return df
+
 #Funcion para la generacion de novedades mayores al 50%
 def generar_novedades(df, Sobrepeso_Novedades):
   df_Nov_Sobrepeso = df[(df['Sobrepeso_calculado'] >= Sobrepeso_Novedades) & (df['Año:'] == Añoeval)]   #Filtra los registros del añoeval con sobrepeso >= al límite
@@ -370,6 +379,17 @@ def calcular_columnas_totalizado_mezclas(df):
                                             'ENCAPSULADORA':0.006,
                                             'INGEPACK 2':0.0068})
 
+  df['Costo/kg'] = df['Impte.ML'] / df['Ctd.']
+  df['Ahorros_Perdidas'] = (df['Meta'] - df['Sobrepeso']) * df['Real_empaque'] * df['Costo/kg']
+  return df
+
+#Funcion para calcular valores
+def calcular_columnas_totalizado_bog(df, meta):
+  df['Real_empaque'] = df['Unidades Producidas (Conformes) :'] * (df['Peso Promedio de la unidad (K):']/1000)
+  df['Debe_ser_empaque'] = df['Unidades Producidas (Conformes) :'] * (df['Gramaje (K):']/1000)
+  df['Diferencia'] = df['Real_empaque'] - df['Debe_ser_empaque']
+  df['Sobrepeso'] = df['Diferencia'] / df['Debe_ser_empaque']
+  df['Meta'] = meta
   df['Costo/kg'] = df['Impte.ML'] / df['Ctd.']
   df['Ahorros_Perdidas'] = (df['Meta'] - df['Sobrepeso']) * df['Real_empaque'] * df['Costo/kg']
   return df

@@ -45,11 +45,11 @@ def main_Script_Env_Sol_v2():
     #Rutas del archivo de Consolidados
     Ruta_Consolidados = r'\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\Consolidados_Salones\Envase_Soluble\Consolidado_V2.xlsx'        # Ruta del archivo de Consolidados
 
-    #Ruta de salida
-    Ruta_Env_Sol = r'G:\.shortcut-targets-by-id\1rqpfbdZ6z51epFv6ZwognhckW7HqBMjN\SIRI_2024_INFORMES_SOBREPESO\INFORME_ENVASE_SOLUBLE_MEDELLIN'                          # DB_Envase_Soluble_Out_vf.csv
+    # #Ruta de salida
+    # Ruta_Env_Sol = r'\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\Consolidados_Salones\Envase_Soluble'                                 # DB_Envase_Soluble_Out_vf.csv
 
     #Ruta - Metas de Sobrepeso - Env Soluble
-    Ruta_Metas_Sobrepeso = r'G:\.shortcut-targets-by-id\1rqpfbdZ6z51epFv6ZwognhckW7HqBMjN\SIRI_2024_INFORMES_SOBREPESO\INFORME_ENVASE_SOLUBLE_MEDELLIN/Metas_Env_Sol_2025.xlsx'  #Ruta del archivo metas sobrepeso
+    Ruta_Metas_Sobrepeso = r'\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\Consolidados_Salones\Envase_Soluble\Metas_Env_Sol_2025.xlsx'  #Ruta del archivo metas sobrepeso
 
 
     #Validacion de existencia de las rutas
@@ -58,13 +58,13 @@ def main_Script_Env_Sol_v2():
         "Ruta_Archivo_EGE": Ruta_Archivo_EGE,
         "Ruta_Novedades": Ruta_Novedades,
         "Ruta_Consolidados": Ruta_Consolidados,
-        "Ruta_Env_Sol": Ruta_Env_Sol,
+        # "Ruta_Env_Sol": Ruta_Env_Sol,
         "Ruta_Metas_Sobrepeso": Ruta_Metas_Sobrepeso,
     }.items():
-      if not os.path.exists(ruta):
-        print(f"La ruta '{nombre}' no fue encontrada.")
-      else:
-        print(f"Ruta '{nombre}' encontrada.")
+        if not os.path.exists(ruta):
+            print(f"La ruta '{nombre}' no fue encontrada.")
+        else:
+            print(f"Ruta '{nombre}' encontrada.")
 
 
     # In[5]:
@@ -467,8 +467,8 @@ def main_Script_Env_Sol_v2():
     # In[54]:
 
 
-    df_Costos_Mp = fc.leer_archivo(r"G:\.shortcut-targets-by-id\1rqpfbdZ6z51epFv6ZwognhckW7HqBMjN\SIRI_2024_INFORMES_SOBREPESO\INFORME_ENVASE_SOLUBLE_MEDELLIN\Tablas_Costos_Productos_MP.xlsx", "Recetas_solubles_2025")
-    df_Financiera_Mp = fc.leer_archivo(r"G:\.shortcut-targets-by-id\1rqpfbdZ6z51epFv6ZwognhckW7HqBMjN\SIRI_2024_INFORMES_SOBREPESO\INFORME_ENVASE_SOLUBLE_MEDELLIN\Tablas_Costos_Productos_MP.xlsx", "Datos_Financiera_Consolidados")
+    df_Costos_Mp = fc.leer_archivo(r"\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\Consolidados_Salones\Envase_Soluble\Tablas_Costos_Productos_MP.xlsx", "Recetas_solubles_2025")
+    df_Financiera_Mp = fc.leer_archivo(r"\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\Consolidados_Salones\Envase_Soluble\Tablas_Costos_Productos_MP.xlsx", "Datos_Financiera_Consolidados")
     df_Costos_Mp.head(2)
 
 
@@ -793,8 +793,7 @@ def main_Script_Env_Sol_v2():
     # In[97]:
 
 
-    df_pivot_Codigos.to_excel(r'G:\.shortcut-targets-by-id\1rqpfbdZ6z51epFv6ZwognhckW7HqBMjN\SIRI_2024_INFORMES_SOBREPESO\INFORME_ENVASE_SOLUBLE_MEDELLIN\Codigos_Totales.xlsx', sheet_name='Hoja1', index=False)
-
+    df_pivot_Codigos.to_excel(r'\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\Consolidados_Salones\Envase_Soluble\Codigos_Totales.xlsx', sheet_name='Hoja1', index=False)
 
     # In[98]:
 
@@ -857,7 +856,7 @@ def main_Script_Env_Sol_v2():
 
     #Diccionario de hojas para el archivo de novedades
     dataframes_novedades = {
-        "Sobrepeso mayor  5%": df_Env_Sol_Nov_Sobrepeso,           #Novedades de sobrepeso
+        "Sobrepeso mayor  50%": df_Env_Sol_Nov_Sobrepeso,          #Novedades de sobrepeso
         "Codigos Nulo TPM": df_Env_Sol_Codigos_nan,                #Novedades codigos nulos
         "Codigos unicos en TPM": df_Env_Sol_Codigos_unicos,        #Codigos presentes es TPM y no en la COOISPI
         "Codigos NA,Vacio, 0": df_Env_Sol_nan_ceros,               #Valores nulos o ceros para gramaje, unidades producidas y promedio peso unidad

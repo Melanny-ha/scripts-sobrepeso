@@ -132,6 +132,7 @@ def main_Script_Emp_2_v2():
     #Tomar solo las columnas de interes del informe de Empaques2 para el sobrepeso
     Columnas=['Número','Dia','Fecha','Mes:','IdMes','Año:','Máquina / Equipo:','Semana:','Turno:','Código y Descrip. / Producto:','Unidades Producidas (Conformes) :','Peso Promedio de la unidad (K):','Gramaje (K):']
     df_Emp_2 = df_Emp_2[Columnas]
+    df_Emp_2.head(2)
 
 
     # In[13]:
@@ -153,6 +154,7 @@ def main_Script_Emp_2_v2():
 
     #Filtrar_nulos
     df_Emp_2_nan_ceros, df_Emp_2 = fc.filtrar_nulos(df_Emp_2, columnas_filtrar_nulos)
+    df_Emp_2_nan_ceros.head(2)
 
 
     # **Modificación de los tipos de datos del archivo de TPM de EMPAQUES 2**
@@ -174,28 +176,41 @@ def main_Script_Emp_2_v2():
     # In[18]:
 
 
+    filtro_nan_ceros = df_Emp_2[columnas_filtrar_nulos].isna().any(axis=1) | (df_Emp_2[columnas_filtrar_nulos] == 0).any(axis=1)
+    df_Emp_2_nan_ceros = df_Emp_2[filtro_nan_ceros]
+    df_Emp_2 = df_Emp_2[~filtro_nan_ceros]
+
+
+    # In[19]:
+
+
     #Extraer_codigo
     df_Emp_2 = fc.extraer_codigo(df_Emp_2)
 
 
     # **Identificación y supresión de aquellos códigos con valores nulos**
 
-    # In[19]:
+    # In[20]:
 
 
     #Eliminar_codigos_nan
     df_Emp_2, df_Emp_2_Codigos_nan = fc.eliminar_codigos_nan(df_Emp_2)
-
-
-    # In[20]:
-
-
-    filtro_nan_ceros = df_Emp_2[columnas_filtrar_nulos].isna().any(axis=1) | (df_Emp_2[columnas_filtrar_nulos] == 0).any(axis=1)
-    df_Emp_2_nan_ceros = df_Emp_2[filtro_nan_ceros]
-    df_Emp_2 = df_Emp_2[~filtro_nan_ceros]
+    df_Emp_2_Codigos_nan.head(2)
 
 
     # In[21]:
+
+
+    df_Emp_2.head()
+
+
+    # In[22]:
+
+
+    df_Emp_2_nan_ceros.head()
+
+
+    # In[23]:
 
 
     #Calcular_columnas
@@ -204,13 +219,13 @@ def main_Script_Emp_2_v2():
 
     # **Generación de Novedades**
 
-    # In[22]:
+    # In[24]:
 
 
     Sobrepeso_Novedades = 0.1  #10% de Sobrepeso
 
 
-    # In[23]:
+    # In[25]:
 
 
     #Generar_novedades
@@ -218,7 +233,7 @@ def main_Script_Emp_2_v2():
     # df_Emp_2_Nov_Sobrepeso.head()
 
 
-    # In[24]:
+    # In[26]:
 
 
     #Agregar columna 'Costo/kg'
@@ -227,14 +242,14 @@ def main_Script_Emp_2_v2():
 
     # **Tabla de Consolidado Mensual**
 
-    # In[25]:
+    # In[27]:
 
 
     #Pivote_consolidado
     df_Emp_2_Mes = fc.pivote_consolidado(df_Emp_2)
 
 
-    # In[26]:
+    # In[28]:
 
 
     #Tomar datos desde el año 2024 en adelante
@@ -243,13 +258,13 @@ def main_Script_Emp_2_v2():
 
     # **Creación de la agrupación Mensual del archivo de semielaborados**
 
-    # In[27]:
+    # In[29]:
 
 
     df_costo_semi = df_COOISPI_COMB.copy(deep=True)
 
 
-    # In[28]:
+    # In[30]:
 
 
     #Creacion de la agrupacion mensual del archivo semielaborado
@@ -258,34 +273,34 @@ def main_Script_Emp_2_v2():
 
     # **Generación del nuevo archivo consolidado V2**
 
-    # In[29]:
+    # In[31]:
 
 
     df_Emp2_2 = df_Emp_2.copy(deep=True)
 
 
-    # In[30]:
+    # In[32]:
 
 
     #Traer la columna 'Costo/kg' al dataframe original
     df_Emp2_2 = fc.merge_costo(df_Emp2_2, df_costo_semi_Mes)
 
 
-    # In[31]:
+    # In[33]:
 
 
     #Eliminar la columna Costo/kg antigua y renombrar la nueva
     df_Emp2_2 = fc.modificar_costo(df_Emp2_2)
 
 
-    # In[32]:
+    # In[34]:
 
 
     #Definir meta sobrepeso
     df_Emp2_2['Meta'] = 0.015
 
 
-    # In[33]:
+    # In[35]:
 
 
     #Calcular columna 'Ahorros/Perdidas'
@@ -293,7 +308,7 @@ def main_Script_Emp_2_v2():
     # df_Emp2_2.head()
 
 
-    # In[34]:
+    # In[36]:
 
 
     # df_Emp2_2.dtypes
@@ -301,28 +316,28 @@ def main_Script_Emp_2_v2():
 
     # **Unión de los DataFrames en un DataFrame totalizado**
 
-    # In[35]:
+    # In[37]:
 
 
     #Crear copia de df_Emp_2_Mes
     df_totalizado_Mes = df_Emp_2_Mes.copy(deep=True)
 
 
-    # In[36]:
+    # In[38]:
 
 
     #Validar que no hay filas repetidas en df_totalizado_Mes
     fc.filas_repetidas(df_totalizado_Mes)
 
 
-    # In[37]:
+    # In[39]:
 
 
     #Fusionar los DataFrames en base a 'Año:', 'Codigo' y 'Mes:'
     df_totalizado_Mes = fc.unir_dataframes(df_totalizado_Mes, df_costo_semi_Mes)
 
 
-    # In[38]:
+    # In[40]:
 
 
     #Metodo calcular_columnas_totalizado con meta fija
@@ -330,21 +345,21 @@ def main_Script_Emp_2_v2():
     # df_totalizado_Mes.head()
 
 
-    # In[39]:
+    # In[41]:
 
 
     #Obtener Codigos unicos | Cod. Descrip. | Maquina con un merge
     df_Codigos_Emp_2 = fc.obtener_cod_descrip(df_costo_semi, df_Emp_2_Mes)
 
 
-    # In[40]:
+    # In[42]:
 
 
     #Obtener Maquinas únicas de TPM o df_codigos_desc_maq_Mezclas
     df_Maquinas_Emp_2 = fc.eliminar_duplicados_columna(df_Codigos_Emp_2, 'Máquina / Equipo:')
 
 
-    # In[41]:
+    # In[43]:
 
 
     #Unión de los dataframes de no convertibles (validar_y_convertir_datos)
@@ -353,14 +368,14 @@ def main_Script_Emp_2_v2():
 
     # **Generación de un archivo de fechas Automáticas**
 
-    # In[42]:
+    # In[44]:
 
 
     #Generar dataframe con fechas dese 2024-01-01 hasta el dia actual
     df_Fechas = fc.generar_fechas("2024-01-01")
 
 
-    # In[43]:
+    # In[45]:
 
 
     # print(df_Emp_2.shape)
@@ -381,7 +396,7 @@ def main_Script_Emp_2_v2():
 
     # **Consolidado csv**
 
-    # In[44]:
+    # In[46]:
 
 
     # Ruta para consolidado df_Emp2_2
@@ -390,7 +405,7 @@ def main_Script_Emp_2_v2():
 
     # **Archivo de consolidado**
 
-    # In[45]:
+    # In[47]:
 
 
     #Diccionario de hojas para el archivo de consolidado
@@ -410,7 +425,7 @@ def main_Script_Emp_2_v2():
 
     # **Archivo de novedades : Este archivo compila las diferentes novedades presentes en los archivos de TPM**
 
-    # In[46]:
+    # In[48]:
 
 
     #Diccionario de hojas para el archivo de novedades
@@ -423,6 +438,18 @@ def main_Script_Emp_2_v2():
     }
     #Guardar el archivo de Novedades
     fc.crear_archivo_novedades(Ruta_Novedades, dataframes_novedades)
+
+
+    # In[49]:
+
+
+    df_Emp_2_Codigos_nan.head()
+
+
+    # In[50]:
+
+
+    df_Emp_2_nan_ceros.head()
 
 
 if __name__ == '__main__':

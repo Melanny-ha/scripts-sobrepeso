@@ -7,8 +7,11 @@ import asyncio
 
 asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy()) # usar WindowsSelectorEventLoopPolicy para ejecución con libreria Jupyter y/o notebooks y no generar "RuntimeWarning: Proactor event loop..."
 
-carpeta_notebooks = "C:/mha/scripts_sobrepeso/informes_ipynb"       #carpeta de archivos .ipynb
-carpeta_salida_py = "C:/mha/scripts_sobrepeso/informes_py"          #carpeta de archivos .py
+# carpeta_notebooks = "C:/mha/scripts_sobrepeso/informes_ipynb"       #carpeta de archivos .ipynb
+# carpeta_salida_py = "C:/mha/scripts_sobrepeso/informes_py"          #carpeta de archivos .py
+
+carpeta_notebooks = "C:/mha/scripts_ambiental/scripts_ipynb"       #carpeta de archivos .ipynb
+carpeta_salida_py = "C:/mha/scripts_ambiental/scripts_py"          #carpeta de archivos .py
 
 os.makedirs(carpeta_salida_py, exist_ok=True)    #crea la carpeta para .py si no existe
 

@@ -28,7 +28,7 @@ def main_Script_Molido_v2():
     # **Variables globales de las rutas necesarias**
 
     # In[4]:
-
+    
 
     #Rutas del archivo de la COOISPI
     Ruta_COOISPI = r'\\10.28.5.232\s3-1colcafeci-servicios-jtc\TPM\Colcafé Formularios\BD Sobrepeso\COOISPI\Datos_COOISPI_Molido.csv'                         # Ruta COOISPI en csv
